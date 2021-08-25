@@ -8,6 +8,10 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField]
     private float playerSpeed = 5.0f;
     private float gravity = 9.81f;
+    [SerializeField]
+    private GameObject muzzleFlashPrefab;
+    [SerializeField]
+    private GameObject HitMarkerPrefab;
     // Start is called before the first frame update
     void Start()
     {
@@ -18,6 +22,24 @@ public class PlayerMovement : MonoBehaviour
     void Update()
     {
         Movement();
+        //raycast from the centre of the MainCamera
+        if (Input.GetMouseButton(0))
+        {
+            muzzleFlashPrefab.SetActive(true);
+            Ray ray = Camera.main.ScreenPointToRay(new Vector3( Screen.width / 2f, Screen.height / 2f, 0));
+            RaycastHit hit;
+            if (Physics.Raycast(ray,out hit,Mathf.Infinity))
+            {
+                print("Ray got hit" + hit.transform.name);
+                Instantiate(HitMarkerPrefab, hit.point, Quaternion.identity);
+            }
+        }
+        else
+        {
+            muzzleFlashPrefab.SetActive(false);
+
+        }
+        
     }
 
     private void Movement()
