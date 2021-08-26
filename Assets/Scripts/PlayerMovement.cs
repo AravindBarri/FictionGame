@@ -4,42 +4,89 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
+    [SerializeField] float fireRate = 1f;
+    [SerializeField] float timer = 5f;
     private CharacterController character;
-    [SerializeField]
-    private float playerSpeed = 5.0f;
+    [SerializeField] private float playerSpeed = 5.0f;
     private float gravity = 9.81f;
-    [SerializeField]
-    private GameObject muzzleFlashPrefab;
-    [SerializeField]
-    private GameObject HitMarkerPrefab;
+    [SerializeField] private GameObject muzzleFlashPrefab;
+    [SerializeField] private GameObject HitMarkerPrefab;
+    private AudioSource audioSource;
+    [SerializeField] private AudioClip[] audioClip;
+
+    public int bulletCount = 50;
     // Start is called before the first frame update
     void Start()
     {
-        character = GetComponent<CharacterController>();
+        character = this.GetComponent<CharacterController>();
+        audioSource = GameObject.Find("AudioManager").GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
     void Update()
     {
         Movement();
-        //raycast from the centre of the MainCamera
+        timer += Time.deltaTime;
+        if(timer>fireRate)
+        {
+            timer += Time.deltaTime;
+            if (timer > fireRate)
+            {
+                if (Input.GetMouseButton(0))
+                {
+                    
+                    timer = 0f;
+                    if (bulletCount > 0)
+                    {
+                        Shoot();
+                    }
+                    else
+                    {
+                        print("Not enough bullets");
+                    }
+
+                }
+                else
+                {
+                    muzzleFlashPrefab.SetActive(false);
+                }
+            }
+            
+
+            //raycast from the centre of main camera
+
+
+        }
+    //raycast from the centre of the MainCamera
         if (Input.GetMouseButton(0))
         {
-            muzzleFlashPrefab.SetActive(true);
-            Ray ray = Camera.main.ScreenPointToRay(new Vector3( Screen.width / 2f, Screen.height / 2f, 0));
-            RaycastHit hit;
-            if (Physics.Raycast(ray,out hit,Mathf.Infinity))
-            {
-                print("Ray got hit" + hit.transform.name);
-                Instantiate(HitMarkerPrefab, hit.point, Quaternion.identity);
-            }
+            Shoot();
         }
         else
         {
             muzzleFlashPrefab.SetActive(false);
+            audioSource.Stop();
+
 
         }
         
+    }
+
+    private void Shoot()
+    {
+        muzzleFlashPrefab.SetActive(true);
+        Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
+        RaycastHit hit;
+        if (Physics.Raycast(ray, out hit, Mathf.Infinity))
+        {
+            print("Ray got hit" + hit.transform.name);
+            HitMarkerManager.hitinstance.instancePoint = hit.point;
+            HitMarkerManager.hitinstance.SpawnMarker();
+
+            audioSource.clip = audioClip[1];
+            audioSource.Play();
+            audioSource.loop = false;
+        }
     }
 
     private void Movement()
@@ -49,5 +96,6 @@ public class PlayerMovement : MonoBehaviour
         velocity.y = -gravity;
         velocity = transform.transform.TransformDirection(velocity);
         character.Move(velocity * Time.deltaTime);
+        
     }
 }
