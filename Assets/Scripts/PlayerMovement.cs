@@ -20,6 +20,9 @@ public class PlayerMovement : MonoBehaviour
     {
         character = this.GetComponent<CharacterController>();
         audioSource = GameObject.Find("AudioManager").GetComponent<AudioSource>();
+        /*audioSource.clip = audioClip[0];
+        audioSource.Play();
+        audioSource.loop = true;*/
     }
 
     // Update is called once per frame
@@ -29,12 +32,12 @@ public class PlayerMovement : MonoBehaviour
         timer += Time.deltaTime;
         if(timer>fireRate)
         {
+            
             timer += Time.deltaTime;
             if (timer > fireRate)
             {
                 if (Input.GetMouseButton(0))
                 {
-                    
                     timer = 0f;
                     if (bulletCount > 0)
                     {
@@ -50,6 +53,18 @@ public class PlayerMovement : MonoBehaviour
                 {
                     muzzleFlashPrefab.SetActive(false);
                 }
+                if (Input.GetMouseButtonDown(0))
+                {
+                    /*audioSource.clip = audioClip[1];
+                    audioSource.Play();
+                    audioSource.loop = true;*/
+                    audioSource.PlayOneShot(audioClip[1], 0.1F);
+                }
+                if (Input.GetMouseButtonUp(0))
+                {
+                    //audioSource.Stop();
+                }
+
             }
             
 
@@ -58,7 +73,7 @@ public class PlayerMovement : MonoBehaviour
 
         }
     //raycast from the centre of the MainCamera
-        if (Input.GetMouseButton(0))
+        /*if (Input.GetMouseButton(0))
         {
             Shoot();
         }
@@ -68,7 +83,7 @@ public class PlayerMovement : MonoBehaviour
             audioSource.Stop();
 
 
-        }
+        }*/
         
     }
 
@@ -83,9 +98,7 @@ public class PlayerMovement : MonoBehaviour
             HitMarkerManager.hitinstance.instancePoint = hit.point;
             HitMarkerManager.hitinstance.SpawnMarker();
 
-            audioSource.clip = audioClip[1];
-            audioSource.Play();
-            audioSource.loop = false;
+            
         }
     }
 

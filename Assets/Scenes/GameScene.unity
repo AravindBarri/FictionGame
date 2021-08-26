@@ -230,8 +230,8 @@ GameObject:
   - component: {fileID: 100339269}
   - component: {fileID: 100339273}
   - component: {fileID: 100339275}
-  - component: {fileID: 100339276}
   - component: {fileID: 100339278}
+  - component: {fileID: 100339276}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -383,11 +383,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fireRate: 1
-  timer: 0
+  timer: 1
   playerSpeed: 5
   muzzleFlashPrefab: {fileID: 1911464183}
   HitMarkerPrefab: {fileID: 1278410308571632, guid: 0dca392d0ad60af418c1bace1abde0c6, type: 3}
-  audioSource: {fileID: 0}
   audioClip:
   - {fileID: 8300000, guid: 460cbf252686b5f40b1ec18039f70b59, type: 3}
   - {fileID: 8300000, guid: fe8a9b071dcb76c419fb6a53d47deb1e, type: 3}

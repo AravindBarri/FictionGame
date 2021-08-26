@@ -8,7 +8,7 @@ public class HitMarkerPool : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Invoke("PushtoPool", 2f);
+        Invoke("PushtoPool", 4f);
     }
     private void Update()
     {
