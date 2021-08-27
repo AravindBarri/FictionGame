@@ -22,6 +22,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private GameObject weapon;
 
     public static PlayerMovement playerinstance;
+    [SerializeField]
 
     // Start is called before the first frame update
     void Start()
@@ -109,7 +110,11 @@ public class PlayerMovement : MonoBehaviour
             print("Ray got hit" + hit.transform.name);
             HitMarkerManager.hitinstance.instancePoint = hit.point;
             HitMarkerManager.hitinstance.SpawnMarker();
-
+            if(hit.transform.tag == "WoodenCrate")
+            {
+                DestroyableObjects.destroyInstance.CrateDestroy();
+            }
+            
             
         }
     }
