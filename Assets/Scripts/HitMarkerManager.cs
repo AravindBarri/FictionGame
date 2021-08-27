@@ -21,7 +21,7 @@ public class HitMarkerManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        print(hitmarkerpool.Count);
+        //print(hitmarkerpool.Count); 
     }
     void CreatePrefabs(int value)
     {

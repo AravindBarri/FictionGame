@@ -14,7 +14,15 @@ public class PlayerMovement : MonoBehaviour
     private AudioSource audioSource;
     [SerializeField] private AudioClip[] audioClip;
 
-    public int bulletCount = 50;
+
+    [SerializeField] private int MaximumAmmo = 50;
+    public int CurrentAmmo = 0;
+    public bool hascoin = false;
+
+    [SerializeField] private GameObject weapon;
+
+    public static PlayerMovement playerinstance;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -23,6 +31,8 @@ public class PlayerMovement : MonoBehaviour
         /*audioSource.clip = audioClip[0];
         audioSource.Play();
         audioSource.loop = true;*/
+        CurrentAmmo = MaximumAmmo;
+        playerinstance = this;
     }
 
     // Update is called once per frame
@@ -38,8 +48,10 @@ public class PlayerMovement : MonoBehaviour
             {
                 if (Input.GetMouseButton(0))
                 {
+                    CurrentAmmo--;
+                    print(CurrentAmmo);
                     timer = 0f;
-                    if (bulletCount > 0)
+                    if (CurrentAmmo >0)
                     {
                         Shoot();
                     }
@@ -72,18 +84,18 @@ public class PlayerMovement : MonoBehaviour
 
 
         }
-    //raycast from the centre of the MainCamera
-        /*if (Input.GetMouseButton(0))
+        if (Input.GetKeyDown(KeyCode.R))
         {
-            Shoot();
+            Invoke("ReloadBullets", 1f);
         }
-        else
+        if (CurrentAmmo > 0)
         {
-            muzzleFlashPrefab.SetActive(false);
-            audioSource.Stop();
-
-
-        }*/
+            UIManagerScript.UIInstance.setAmmo(CurrentAmmo);
+        }
+        if(CurrentAmmo<=0)
+        {
+            UIManagerScript.UIInstance.setAmmoEmpty();
+        }
         
     }
 
@@ -110,5 +122,13 @@ public class PlayerMovement : MonoBehaviour
         velocity = transform.transform.TransformDirection(velocity);
         character.Move(velocity * Time.deltaTime);
         
+    }
+    void ReloadBullets()
+    {
+        CurrentAmmo = MaximumAmmo;
+    }
+    public void ActiveWeapon()
+    {
+        weapon.SetActive(true);
     }
 }
