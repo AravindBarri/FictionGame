@@ -20,6 +20,7 @@ public class PlayerMovement : MonoBehaviour
     public bool hascoin = false;
 
     [SerializeField] private GameObject weapon;
+    private bool weaponstate = false;
 
     public static PlayerMovement playerinstance;
     [SerializeField]
@@ -47,36 +48,40 @@ public class PlayerMovement : MonoBehaviour
             timer += Time.deltaTime;
             if (timer > fireRate)
             {
-                if (Input.GetMouseButton(0))
+                if(weaponstate == true)
                 {
-                    CurrentAmmo--;
-                    print(CurrentAmmo);
-                    timer = 0f;
-                    if (CurrentAmmo >0)
+                    if (Input.GetMouseButton(0))
                     {
-                        Shoot();
+                        CurrentAmmo--;
+                        print(CurrentAmmo);
+                        timer = 0f;
+                        if (CurrentAmmo > 0)
+                        {
+                            Shoot();
+                        }
+                        else
+                        {
+                            print("Not enough bullets");
+                        }
+
                     }
                     else
                     {
-                        print("Not enough bullets");
+                        muzzleFlashPrefab.SetActive(false);
                     }
-
+                    if (Input.GetMouseButtonDown(0))
+                    {
+                        /*audioSource.clip = audioClip[1];
+                        audioSource.Play();
+                        audioSource.loop = true;*/
+                        audioSource.PlayOneShot(audioClip[1], 0.1F);
+                    }
+                    if (Input.GetMouseButtonUp(0))
+                    {
+                        //audioSource.Stop();
+                    }
                 }
-                else
-                {
-                    muzzleFlashPrefab.SetActive(false);
-                }
-                if (Input.GetMouseButtonDown(0))
-                {
-                    /*audioSource.clip = audioClip[1];
-                    audioSource.Play();
-                    audioSource.loop = true;*/
-                    audioSource.PlayOneShot(audioClip[1], 0.1F);
-                }
-                if (Input.GetMouseButtonUp(0))
-                {
-                    //audioSource.Stop();
-                }
+               
 
             }
             
@@ -135,5 +140,6 @@ public class PlayerMovement : MonoBehaviour
     public void ActiveWeapon()
     {
         weapon.SetActive(true);
+        weaponstate = true;
     }
 }
